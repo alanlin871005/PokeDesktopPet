@@ -1,0 +1,13 @@
+# 嚴格排除個人存檔、精靈素材、打包產物與虛擬環境
+data/
+dist/
+build/
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.spec
+*.log
+*.tmp
+.DS_Store
+Thumbs.db
