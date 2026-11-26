@@ -572,10 +572,11 @@ class DesktopPet:
         self.anim_frames.clear()
         for anim_name, path_key in (("idle", "idle_gif"), ("walk", "walk_gif")):
             gif_path = sync_pokefinder.resolve_sprite_path(self.pokemon[path_key])
-            f_left, d_left, w, h = load_gif_frames(gif_path, self.scale, flip=False)
-            f_right, d_right, _, _ = load_gif_frames(gif_path, self.scale, flip=True)
-            self.anim_frames[(anim_name, -1)] = (f_left, d_left)
+            # Poke Finder default sprites face right (+1); mirror horizontally for left (-1)
+            f_right, d_right, w, h = load_gif_frames(gif_path, self.scale, flip=False)
+            f_left, d_left, _, _ = load_gif_frames(gif_path, self.scale, flip=True)
             self.anim_frames[(anim_name, 1)] = (f_right, d_right)
+            self.anim_frames[(anim_name, -1)] = (f_left, d_left)
             self.w, self.h = w, h
         self.frame_idx = 0
         self.win.geometry(f"{self.w}x{self.h}+{int(self.x)}+{int(self.y)}")
@@ -855,6 +856,7 @@ class DesktopPet:
         dy = (self.y + self.h) - target.top + 32
         self.vy = -min(21.5, math.sqrt(2.0 * 0.75 * max(40.0, dy)))
         self.vx = random.uniform(-1.5, 1.5)
+        self.facing = 1 if self.vx >= 0 else -1
         self.state = "walk"
         self.manager.sound.play_event("jump")
         return True
